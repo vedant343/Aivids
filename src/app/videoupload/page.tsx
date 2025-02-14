@@ -83,7 +83,7 @@ function Page() {
   return (
     <div className="bg-white flex flex-col items-center justify-center min-h-screen p-4 space-y-6">
       <div>
-        <div className="border border-gray-300 rounded-md p-2 bg-blue-500">
+        <div className="border border-gray-300 rounded-md p-2 bg-black">
           <CldUploadWidget
             uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}
             options={{
@@ -110,22 +110,20 @@ function Page() {
         </p>
       </div>
 
-      <div className="border border-gray-500 rounded-md border-dotted p-4 w-full max-w-md">
-        {videoUrl ? (
+      {videoUrl ? (
+        <div className="border border-gray-500 rounded-md border-dotted p-4 w-full max-w-md">
           <div className="flex flex-col items-center space-y-4">
-            <h2 className="text-black text-lg font-semibold">
-              Uploaded Video Preview:
-            </h2>
+            <h2 className="text-black text-lg ">Uploaded Video Preview:</h2>
             <video
               className="w-full border border-gray-300 rounded-md"
               controls
               src={videoUrl}
             />
           </div>
-        ) : (
-          <p className="text-center text-gray-700">Yet to upload a video</p>
-        )}
-      </div>
+        </div>
+      ) : (
+        <p className="text-center text-gray-700"></p>
+      )}
 
       <div className="flex flex-col items-center space-y-4">
         <textarea
@@ -137,7 +135,7 @@ function Page() {
           className={`px-4 py-2 rounded-md transition ${
             isTransformButtonDisabled
               ? "bg-gray-400 text-gray-200 cursor-not-allowed"
-              : "bg-blue-500 text-white hover:bg-blue-600"
+              : "bg-black text-white "
           }`}
           disabled={isTransformButtonDisabled}
         >
