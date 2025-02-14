@@ -34,8 +34,38 @@ function Page() {
       });
       const data = await response.json();
       console.log(data);
+
+      // Assuming the response contains the transformed video URL
+      if (data.data && data.data.transformedVideoUrl) {
+        const transformedVideoUrl = data.data.transformedVideoUrl;
+        await saveTransformedVideo(videoUrl, transformedVideoUrl, prompt);
+      }
     } catch (error) {
       console.error("Error transforming video:", error);
+    }
+  };
+
+  const saveTransformedVideo = async (
+    sourceVideoUrl: string,
+    transformedVideoUrl: string,
+    prompt: string
+  ) => {
+    try {
+      const response = await fetch("/api/videos", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          sourceVideoUrl,
+          transformedVideoUrl,
+          transformationParams: { prompt },
+        }),
+      });
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.error("Error saving video:", error);
     }
   };
 
@@ -63,7 +93,7 @@ function Page() {
           onChange={(e) => setPrompt(e.target.value)}
         ></textarea>
         <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">
-          Enter
+          Transform
         </button>
       </div>
     </div>

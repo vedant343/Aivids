@@ -11,7 +11,7 @@ export async function POST(req: Request) {
     const newVideo = new Video({
       sourceVideoUrl,
       transformedVideoUrl,
-      transformationParams,
+      transformationParams: { prompt },
     });
     await newVideo.save();
 
