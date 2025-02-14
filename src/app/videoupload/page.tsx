@@ -3,37 +3,19 @@ import { useState } from "react";
 import { CldUploadWidget } from "next-cloudinary";
 import "next-cloudinary/dist/cld-video-player.css";
 import "dotenv/config";
-import { Upload, Video, ChevronDown, Wand2 } from "lucide-react";
-
-function Navbar() {
-  return (
-    <nav className="bg-white border-b border-gray-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16 items-center">
-          <div className="flex items-center">
-            <Video className="h-8 w-8 text-indigo-600" />
-            <span className="ml-2 text-xl font-semibold text-gray-900">
-              VideoAI
-            </span>
-          </div>
-          <div className="flex items-center space-x-4">
-            <button className="text-gray-500 hover:text-gray-700">Help</button>
-            <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">
-              Sign In
-            </button>
-          </div>
-        </div>
-      </div>
-    </nav>
-  );
-}
+import { uploadVideo } from "@/lib/cloudinary";
+import { NextResponse } from "next/server";
+import { FaUpload } from "react-icons/fa";
 
 function Page() {
   const [videoUrl, setVideoUrl] = useState("");
   const [transformedVideoUrl, setTransformedVideoUrl] = useState("");
   const [prompt, setPrompt] = useState("");
-  const [subtitlePosition, setSubtitlePosition] = useState("Bottom (75%)");
-  const [showAdvanced, setShowAdvanced] = useState(false);
+
+  console.log(
+    "Upload Preset:",
+    process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET
+  );
 
   const handleUpload = async (result: any) => {
     const url = result.info.secure_url;
@@ -99,138 +81,87 @@ function Page() {
   const isTransformButtonDisabled = !videoUrl || !prompt;
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Navbar />
-
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <h1 className="text-4xl font-bold text-center text-gray-800 mb-8">
-          Add professional captions to your video using AI
-        </h1>
-
-        <div className="max-w-3xl mx-auto">
-          <div className="bg-white rounded-xl shadow-sm p-8 border border-gray-200">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-6">
-              Upload Video
-            </h2>
-
-            <CldUploadWidget
-              uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}
-              options={{
-                resourceType: "video",
-                clientAllowedFormats: ["mov", "mp4"],
-              }}
-              onSuccess={handleUpload}
-            >
-              {({ open }) => (
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-16 text-center hover:border-indigo-500 transition-colors cursor-pointer">
-                  <Upload className="mx-auto h-16 w-16 text-gray-400" />
-                  <div className="mt-6">
-                    <p className="text-base text-gray-600">
-                      Drag and drop your video here
-                    </p>
-                    <p className="text-sm text-gray-500 mt-1">or</p>
-                    <button
-                      onClick={open}
-                      className="mt-2 text-sm text-indigo-600 font-medium hover:text-indigo-700"
-                    >
-                      Browse Files
-                    </button>
-                  </div>
-                  <p className="mt-2 text-xs text-gray-500">
-                    Supported formats: MP4, MOV (max 500MB)
-                  </p>
-                </div>
-              )}
-            </CldUploadWidget>
-
-            <div className="mt-10">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Subtitles Position
-              </label>
-              <div className="relative">
-                <select
-                  className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 rounded-md"
-                  value={subtitlePosition}
-                  onChange={(e) => setSubtitlePosition(e.target.value)}
+    <div className="bg-white flex flex-col items-center justify-center min-h-screen p-4 space-y-6">
+      <div>
+        <div className="border border-gray-300 rounded-md p-2 bg-blue-500">
+          <CldUploadWidget
+            uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}
+            options={{
+              resourceType: "video",
+              clientAllowedFormats: ["mov", "mp4"],
+            }}
+            onSuccess={handleUpload}
+          >
+            {({ open }) => {
+              return (
+                <button
+                  className="flex items-center justify-center text-white text-lg px-6 py-3 bg-transparent rounded-md"
+                  onClick={() => open()}
                 >
-                  <option>Bottom (75%)</option>
-                  <option>Top (25%)</option>
-                  <option>Middle (50%)</option>
-                </select>
-              </div>
-              <p className="mt-2 text-sm text-gray-500">
-                Choose where to position the subtitles in the video
-              </p>
-            </div>
-
-            <div className="mt-8">
-              <button
-                className="flex items-center w-full justify-between px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
-                onClick={() => setShowAdvanced(!showAdvanced)}
-              >
-                <span>Advanced Settings</span>
-                <ChevronDown
-                  className={`h-5 w-5 transform ${
-                    showAdvanced ? "rotate-180" : ""
-                  }`}
-                />
-              </button>
-
-              {showAdvanced && (
-                <div className="mt-4 space-y-6 p-6 bg-gray-50 rounded-md">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Font Size
-                    </label>
-                    <input
-                      type="range"
-                      className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                      min="12"
-                      max="36"
-                      defaultValue="24"
-                    />
-                    <div className="flex justify-between text-xs text-gray-500 mt-1">
-                      <span>Small</span>
-                      <span>Large</span>
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Text Color
-                    </label>
-                    <div className="flex items-center space-x-4">
-                      <input
-                        type="color"
-                        className="h-10 w-20"
-                        defaultValue="#ffffff"
-                      />
-                      <div className="flex space-x-2">
-                        <button
-                          className="w-8 h-8 rounded-full bg-white border border-gray-300"
-                          title="White"
-                        ></button>
-                        <button
-                          className="w-8 h-8 rounded-full bg-yellow-300"
-                          title="Yellow"
-                        ></button>
-                        <button
-                          className="w-8 h-8 rounded-full bg-black"
-                          title="Black"
-                        ></button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <button className="mt-10 w-full bg-indigo-600 text-white px-6 py-4 rounded-lg hover:bg-indigo-700 flex items-center justify-center space-x-2 text-lg font-medium">
-              <Wand2 className="h-6 w-6" />
-              <span>Generate Captions</span>
-            </button>
-          </div>
+                  <FaUpload className="mr-2" />
+                  Upload a Video
+                </button>
+              );
+            }}
+          </CldUploadWidget>
         </div>
-      </main>
+        <p className="text-black text-center text-sm mt-2">
+          Allowed formats: <strong>MP4, MOV</strong>
+        </p>
+      </div>
+
+      <div className="border border-gray-500 rounded-md border-dotted p-4 w-full max-w-md">
+        {videoUrl ? (
+          <div className="flex flex-col items-center space-y-4">
+            <h2 className="text-black text-lg font-semibold">
+              Uploaded Video Preview:
+            </h2>
+            <video
+              className="w-full border border-gray-300 rounded-md"
+              controls
+              src={videoUrl}
+            />
+          </div>
+        ) : (
+          <p className="text-center text-gray-700">Yet to upload a video</p>
+        )}
+      </div>
+
+      <div className="flex flex-col items-center space-y-4">
+        <textarea
+          className="bg-white text-black w-full max-w-md p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="Write your prompt here..."
+          onChange={(e) => setPrompt(e.target.value)}
+        ></textarea>
+        <button
+          className={`px-4 py-2 rounded-md transition ${
+            isTransformButtonDisabled
+              ? "bg-gray-400 text-gray-200 cursor-not-allowed"
+              : "bg-blue-500 text-white hover:bg-blue-600"
+          }`}
+          disabled={isTransformButtonDisabled}
+        >
+          Transform
+        </button>
+      </div>
+
+      {transformedVideoUrl && (
+        <div className="flex flex-col items-center space-y-4">
+          <h2 className="text-lg font-semibold">Transformed Video:</h2>
+          <video
+            className="w-full max-w-md border border-gray-300 rounded-md"
+            controls
+            src={transformedVideoUrl}
+          />
+          <a
+            href={transformedVideoUrl}
+            download
+            className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition"
+          >
+            Download Transformed Video
+          </a>
+        </div>
+      )}
     </div>
   );
 }
