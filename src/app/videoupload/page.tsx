@@ -86,6 +86,17 @@ function Page() {
         </CldUploadWidget>
       </div>
 
+      {videoUrl && (
+        <div className="flex flex-col items-center space-y-4">
+          <h2 className="text-lg font-semibold">Uploaded Video Preview:</h2>
+          <video
+            className="w-full max-w-md border border-gray-300 rounded-md"
+            controls
+            src={videoUrl}
+          />
+        </div>
+      )}
+
       <div className="flex flex-col items-center space-y-4">
         <textarea
           className="bg-black w-full max-w-md p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
