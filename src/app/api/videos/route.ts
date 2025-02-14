@@ -5,13 +5,18 @@ import Video from "@/models/Video";
 export async function POST(req: Request) {
   try {
     await connectToDatabase();
-    const { sourceVideoUrl, transformedVideoUrl, transformationParams } =
-      await req.json();
+    const {
+      sourceVideoUrl,
+      transformedVideoUrl,
+      transformationParams,
+      downloadLink,
+    } = await req.json();
 
     const newVideo = new Video({
       sourceVideoUrl,
       transformedVideoUrl,
-      transformationParams: { prompt },
+      transformationParams: { prompt: transformationParams.prompt },
+      downloadLink,
     });
     await newVideo.save();
 
