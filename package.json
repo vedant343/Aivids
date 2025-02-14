@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@fal-ai/client": "^1.2.3",
-    "@uploadcare/react-uploader": "^1.5.0",
     "cloudinary": "^2.5.1",
     "dotenv": "^16.4.7",
     "mongoose": "^8.10.0",
