@@ -1,8 +1,11 @@
 import Link from "next/link";
-
+import Navbar from "./components/Navbar";
 export default function Home() {
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-white text-black pt-16">
+      <div>
+        <Navbar />
+      </div>
       <div className="text-center mb-8">
         <h1 className="text-5xl font-bold mb-4">
           Transform your videos with the help of FAL AI
