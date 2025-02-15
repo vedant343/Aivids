@@ -15,7 +15,7 @@ export async function POST(req: Request) {
     const newVideo = new Video({
       sourceVideoUrl,
       transformedVideoUrl,
-      transformationParams: { prompt: transformationParams.prompt },
+      prompt: transformationParams.prompt,
       downloadLink,
     });
     await newVideo.save();
@@ -26,21 +26,6 @@ export async function POST(req: Request) {
     );
   } catch (error) {
     console.error("Error saving video:", error);
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
-    );
-  }
-}
-
-export async function GET() {
-  try {
-    await connectToDatabase();
-    const videos = await Video.find().sort({ createdAt: -1 });
-
-    return NextResponse.json(videos, { status: 200 });
-  } catch (error) {
-    console.error("Error fetching videos:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }

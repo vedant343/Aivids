@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-
 const VideoSchema = new mongoose.Schema({
   sourceVideoUrl: { type: String, required: true },
   prompt: { type: String, required: true },
@@ -7,6 +6,5 @@ const VideoSchema = new mongoose.Schema({
   downloadLink: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
 });
-console.log("Video model created successfully!");
 
-export default mongoose.model("Video", VideoSchema);
+export default mongoose.models.Video || mongoose.model("Video", VideoSchema);

@@ -1,6 +1,32 @@
+"use client";
 import Link from "next/link";
 import Navbar from "./components/Navbar";
+import { useEffect, useState } from "react";
+
+interface Video {
+  _id: string;
+  sourceVideoUrl: string;
+  transformedVideoUrl: string;
+  transformationParams: {
+    prompt: string;
+  };
+  downloadLink: string;
+  createdAt: Date;
+}
+
 export default function Home() {
+  const [videos, setVideos] = useState<Video[]>([]);
+
+  useEffect(() => {
+    const fetchVideos = async () => {
+      const response = await fetch("/api/videos/history");
+      const data = await response.json();
+      setVideos(data);
+    };
+
+    fetchVideos();
+  }, []);
+
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-white text-black pt-16">
       <div>
@@ -29,9 +55,31 @@ export default function Home() {
           Discover how our advanced AI technology transforms videos with
           stunning results.
         </p>
-        <Link href="/videoupload">
-          {/* //{source video and resulted video section } */}
-        </Link>
+        {videos.map((video) => (
+          <div key={video._id} className="border p-4 mb-4 rounded-md">
+            <h3 className="font-bold">
+              Prompt: {video.transformationParams.prompt}
+            </h3>
+            <div className="flex space-x-4">
+              <div>
+                <h4>Source Video Preview</h4>
+                <video
+                  className="w-full max-w-xs border border-gray-300 rounded-md"
+                  controls
+                  src={video.sourceVideoUrl}
+                />
+              </div>
+              <div>
+                <h4>Resulted Video Preview</h4>
+                <video
+                  className="w-full max-w-xs border border-gray-300 rounded-md"
+                  controls
+                  src={video.transformedVideoUrl}
+                />
+              </div>
+            </div>
+          </div>
+        ))}
       </section>
     </div>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CldUploadWidget } from "next-cloudinary";
 import "next-cloudinary/dist/cld-video-player.css";
 import { FaUpload } from "react-icons/fa";
@@ -10,12 +10,25 @@ import handleUpload from "./handleUpload";
 import saveTransformedVideo from "./saveTransformedVideo";
 //import transformVideo from "./transformVideo";
 
+// Define the Video interface
+interface Video {
+  _id: string;
+  sourceVideoUrl: string;
+  transformedVideoUrl: string;
+  transformationParams: {
+    prompt: string;
+  };
+  downloadLink: string;
+  createdAt: Date;
+}
+
 function Page() {
   const [videoUrl, setVideoUrl] = useState<string>("");
   const [transformedVideoUrl, setTransformedVideoUrl] = useState<string>("");
   const [prompt, setPrompt] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [downloadLink, setDownloadLink] = useState<string>("");
+  const [videos, setVideos] = useState<Video[]>([]);
 
   const uploadHandler = handleUpload(setVideoUrl);
 
@@ -66,6 +79,16 @@ function Page() {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    const fetchVideos = async () => {
+      const response = await fetch("/api/videos/history");
+      const data = await response.json();
+      setVideos(data);
+    };
+
+    fetchVideos();
+  }, []);
 
   return (
     <div>
