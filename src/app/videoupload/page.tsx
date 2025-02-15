@@ -8,19 +8,6 @@ import DownloadButton from "../components/DownloadButton";
 import Navbar from "../components/Navbar";
 import handleUpload from "./handleUpload";
 import saveTransformedVideo from "./saveTransformedVideo";
-//import transformVideo from "./transformVideo";
-
-// Define the Video interface
-interface Video {
-  _id: string;
-  sourceVideoUrl: string;
-  transformedVideoUrl: string;
-  transformationParams: {
-    prompt: string;
-  };
-  downloadLink: string;
-  createdAt: Date;
-}
 
 function Page() {
   const [videoUrl, setVideoUrl] = useState<string>("");
@@ -28,7 +15,6 @@ function Page() {
   const [prompt, setPrompt] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [downloadLink, setDownloadLink] = useState<string>("");
-  const [videos, setVideos] = useState<Video[]>([]);
 
   const uploadHandler = handleUpload(setVideoUrl);
 
@@ -81,13 +67,7 @@ function Page() {
   };
 
   useEffect(() => {
-    const fetchVideos = async () => {
-      const response = await fetch("/api/videos/history");
-      const data = await response.json();
-      setVideos(data);
-    };
-
-    fetchVideos();
+    // If you don't need to fetch videos here, you can remove this effect
   }, []);
 
   return (
@@ -156,7 +136,7 @@ function Page() {
         >
           {isLoading ? (
             <div>
-              Generating rseult<span className="loader"></span>
+              Generating result<span className="loader"></span>
             </div>
           ) : (
             "Transform"
