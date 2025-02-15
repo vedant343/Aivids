@@ -6,6 +6,9 @@ import "next-cloudinary/dist/cld-video-player.css";
 import { FaUpload } from "react-icons/fa";
 import DownloadButton from "../components/DownloadButton";
 import Navbar from "../components/Navbar";
+import handleUpload from "./handleUpload";
+import transformVideo from "./transformVideo";
+import saveTransformedVideo from "./saveTransformedVideo";
 
 function Page() {
   const [videoUrl, setVideoUrl] = useState<string>("");
@@ -14,69 +17,7 @@ function Page() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [downloadLink, setDownloadLink] = useState<string>("");
 
-  const handleUpload = async (result: any) => {
-    const url = result.info.secure_url;
-    setVideoUrl(url);
-    console.log("Video URL:", url);
-  };
-
-  const transformVideo = async (videoUrl: string, prompt: string) => {
-    setIsLoading(true);
-    try {
-      console.log("Sending request with:", { videoUrl, prompt });
-
-      const response = await fetch("/api/transformVideo", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ videoUrl, prompt }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      console.log("Received response:", data);
-
-      setTransformedVideoUrl(data.data.video.url);
-      setDownloadLink(data.data.video.url);
-      await saveTransformedVideo(
-        videoUrl,
-        data.data.video.url,
-        prompt,
-        data.data.video.url
-      );
-    } catch (error) {
-      console.error("Error transforming video:", error);
-      alert("Error transforming video. Check console for details.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const saveTransformedVideo = async (
-    sourceVideoUrl: string,
-    transformedVideoUrl: string,
-    prompt: string,
-    downloadLink: string
-  ) => {
-    try {
-      await fetch("/api/videos", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          sourceVideoUrl,
-          transformedVideoUrl,
-          transformationParams: { prompt },
-          downloadLink,
-        }),
-      });
-    } catch (error) {
-      console.error("Error saving video:", error);
-    }
-  };
+  const uploadHandler = handleUpload(setVideoUrl);
 
   return (
     <div>
@@ -89,7 +30,7 @@ function Page() {
               resourceType: "video",
               clientAllowedFormats: ["mov", "mp4"],
             }}
-            onSuccess={handleUpload}
+            onSuccess={uploadHandler}
           >
             {({ open }) => (
               <div>
@@ -131,7 +72,16 @@ function Page() {
               : "bg-black text-white"
           }`}
           disabled={!videoUrl || !prompt || isLoading}
-          onClick={() => transformVideo(videoUrl, prompt)}
+          onClick={() =>
+            transformVideo(
+              videoUrl,
+              prompt,
+              setIsLoading,
+              setTransformedVideoUrl,
+              setDownloadLink,
+              saveTransformedVideo
+            )
+          }
         >
           {isLoading ? (
             <div>
