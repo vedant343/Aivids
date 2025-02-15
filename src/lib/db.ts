@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import Video from "@/models/Video"; // Adjust the path as necessary
 
 const MONGODB_URI = process.env.MONGODB_URI;
 
