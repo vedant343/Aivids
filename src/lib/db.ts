@@ -10,11 +10,11 @@ if (!MONGODB_URI) {
 
 export async function connectToDatabase() {
   try {
-    const conn = await mongoose.connect(MONGODB_URI);
+    const conn = await mongoose.connect(MONGODB_URI!);
     console.log(`MongoDB connected: ${conn.connection.host}`);
     return conn;
   } catch (error) {
-    console.error(`Error: ${error.message}`);
+    console.error(error);
     throw new Error("Database connection failed");
   }
 }
