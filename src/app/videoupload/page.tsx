@@ -12,6 +12,7 @@ function Page() {
   const [transformedVideoUrl, setTransformedVideoUrl] = useState<string>("");
   const [prompt, setPrompt] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [downloadLink, setDownloadLink] = useState<string>("");
 
   const handleUpload = async (result: any) => {
     const url = result.info.secure_url;
@@ -39,12 +40,13 @@ function Page() {
       const data = await response.json();
       console.log("Received response:", data);
 
-      setTransformedVideoUrl(data.transformedVideoUrl);
+      setTransformedVideoUrl(data.data.video.url);
+      setDownloadLink(data.data.video.url);
       await saveTransformedVideo(
         videoUrl,
-        data.transformedVideoUrl,
+        data.data.video.url,
         prompt,
-        data.data?.downloadLink
+        data.data.video.url
       );
     } catch (error) {
       console.error("Error transforming video:", error);
@@ -149,10 +151,7 @@ function Page() {
               controls
               src={transformedVideoUrl}
             />
-            <DownloadButton
-              videoUrl={transformedVideoUrl}
-              disabled={isLoading}
-            />
+            <DownloadButton videoUrl={downloadLink} disabled={isLoading} />
           </div>
         )}
       </div>
