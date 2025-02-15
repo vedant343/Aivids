@@ -1,4 +1,4 @@
-const transformVideo = async (
+export const transformVideo = async (
   videoUrl: string,
   prompt: string,
   setIsLoading: (loading: boolean) => void,
