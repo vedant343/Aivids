@@ -7,8 +7,8 @@ import { FaUpload } from "react-icons/fa";
 import DownloadButton from "../components/DownloadButton";
 import Navbar from "../components/Navbar";
 import handleUpload from "./handleUpload";
-import transformVideo from "./transformVideo";
 import saveTransformedVideo from "./saveTransformedVideo";
+//import transformVideo from "./transformVideo";
 
 function Page() {
   const [videoUrl, setVideoUrl] = useState<string>("");
@@ -18,6 +18,54 @@ function Page() {
   const [downloadLink, setDownloadLink] = useState<string>("");
 
   const uploadHandler = handleUpload(setVideoUrl);
+
+  const transformVideo = async (
+    videoUrl: string,
+    prompt: string,
+    setIsLoading: (loading: boolean) => void,
+    setTransformedVideoUrl: (url: string) => void,
+    setDownloadLink: (url: string) => void,
+    saveTransformedVideo: (
+      sourceVideoUrl: string,
+      transformedVideoUrl: string,
+      prompt: string,
+      downloadLink: string
+    ) => Promise<void>
+  ) => {
+    setIsLoading(true);
+    try {
+      console.log("Sending request with:", { videoUrl, prompt });
+
+      const response = await fetch("/api/transformVideo", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ videoUrl, prompt }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log("Received response:", data);
+
+      setTransformedVideoUrl(data.data.video.url);
+      setDownloadLink(data.data.video.url);
+      await saveTransformedVideo(
+        videoUrl,
+        data.data.video.url,
+        prompt,
+        data.data.video.url
+      );
+    } catch (error) {
+      console.error("Error transforming video:", error);
+      alert("Error transforming video. Check console for details.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div>
@@ -85,8 +133,7 @@ function Page() {
         >
           {isLoading ? (
             <div>
-              Transforming video can take a few minutes...
-              <span className="loader"></span>
+              Generating rseult<span className="loader"></span>
             </div>
           ) : (
             "Transform"
@@ -94,8 +141,8 @@ function Page() {
         </button>
 
         {transformedVideoUrl && (
-          <div className="flex flex-col items-center space-y-4">
-            Uploaded Video Preview
+          <div className="flex text-black flex-col items-center space-y-4">
+            Video Preview
             <video
               className="w-full max-w-md border border-gray-300 rounded-md"
               controls
