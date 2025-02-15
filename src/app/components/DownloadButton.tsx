@@ -2,7 +2,13 @@
 
 import { useState } from "react";
 
-export default function DownloadButton({ videoUrl }: { videoUrl: string }) {
+export default function DownloadButton({
+  videoUrl,
+  disabled,
+}: {
+  videoUrl: string;
+  disabled: boolean;
+}) {
   const [loading, setLoading] = useState(false);
 
   const handleDownload = async () => {
@@ -14,8 +20,6 @@ export default function DownloadButton({ videoUrl }: { videoUrl: string }) {
     setLoading(true);
 
     try {
-      const response = await fetch(videoUrl);
-      //const blob = await response.blob();
       const downloadUrl = `${videoUrl}?download=true`;
       const link = document.createElement("a");
       link.href = downloadUrl;
@@ -34,7 +38,7 @@ export default function DownloadButton({ videoUrl }: { videoUrl: string }) {
     <button
       onClick={handleDownload}
       className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-      disabled={loading}
+      disabled={loading || disabled}
     >
       {loading ? "Downloading..." : "Download Video"}
     </button>

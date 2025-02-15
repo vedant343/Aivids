@@ -19,3 +19,21 @@ body {
   background: var(--background);
   font-family: "Poppins", sans-serif;
 }
+
+.loader {
+  border: 2px solid transparent;
+  border-top: 2px solid white; /* Change color as needed */
+  border-radius: 50%;
+  width: 20px; /* Adjust size as needed */
+  height: 20px; /* Adjust size as needed */
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
