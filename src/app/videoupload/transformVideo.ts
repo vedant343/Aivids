@@ -45,5 +45,3 @@ const transformVideo = async (
     setIsLoading(false);
   }
 };
-
-export default transformVideo;
