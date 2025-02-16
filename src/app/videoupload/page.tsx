@@ -3,12 +3,13 @@
 import { useState } from "react";
 import { CldUploadWidget } from "next-cloudinary";
 import "next-cloudinary/dist/cld-video-player.css";
-import { FaUpload } from "react-icons/fa";
+import { FaUpload, FaDownload } from "react-icons/fa";
 import DownloadButton from "../components/DownloadButton";
 import Navbar from "../components/Navbar";
 import handleUpload from "./handleUpload";
 import saveTransformedVideo from "./saveTransformedVideo";
 import UploadInstructions from "../components/UploadInstrcutions";
+
 function Page() {
   const [videoUrl, setVideoUrl] = useState<string>("");
   const [transformedVideoUrl, setTransformedVideoUrl] = useState<string>("");
@@ -135,14 +136,16 @@ function Page() {
         </button>
 
         {transformedVideoUrl && (
-          <div className="flex text-black flex-col items-center space-y-4">
-            Video Preview
+          <div className="border-4 border-dotted text-black text-center text-lg border-gray-300 rounded-md p-4 w-full max-w-2xl">
+            Transformed Video Preview
             <video
-              className="w-full max-w-md border border-gray-300 rounded-md"
+              className="w-full border border-gray-300 rounded-md mt-2 mb-4"
               controls
               src={transformedVideoUrl}
             />
-            <DownloadButton videoUrl={downloadLink} disabled={isLoading} />
+            <div className="flex justify-center">
+              <DownloadButton videoUrl={downloadLink} disabled={isLoading} />
+            </div>
           </div>
         )}
       </div>

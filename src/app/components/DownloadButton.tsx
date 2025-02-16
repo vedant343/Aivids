@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { FaDownload } from "react-icons/fa";
 
 export default function DownloadButton({
   videoUrl,
@@ -37,10 +38,17 @@ export default function DownloadButton({
   return (
     <button
       onClick={handleDownload}
-      className="px-4 py-2 bg-black text-white rounded-md"
+      className="flex items-center justify-center px-4 py-2 bg-black text-white rounded-md"
       disabled={loading || disabled}
     >
-      {loading ? "Downloading..." : "Download Video"}
+      {loading ? (
+        "Downloading..."
+      ) : (
+        <>
+          <FaDownload className="mr-2" />
+          Download Video
+        </>
+      )}
     </button>
   );
 }
