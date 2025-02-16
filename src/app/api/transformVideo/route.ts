@@ -5,7 +5,6 @@ fal.config({
   credentials: process.env.NEXT_PUBLIC_FAL_KEY,
 });
 const falClient = fal;
-
 export async function POST(req: Request) {
   try {
     const { prompt, videoUrl } = await req.json();
@@ -37,15 +36,13 @@ export async function POST(req: Request) {
       }
     );
 
-    // Log the result from the API
-    console.log("API result:", result);
-
     return NextResponse.json({
       data: result.data,
       requestId: result.requestId,
     });
   } catch (error) {
     console.error("Error during video transformation:", error);
+    alert(`Error during video transformation: ${error.message}`);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }
