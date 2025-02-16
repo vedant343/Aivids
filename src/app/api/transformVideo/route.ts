@@ -42,9 +42,8 @@ export async function POST(req: Request) {
     });
   } catch (error) {
     console.error("Error during video transformation:", error);
-    alert(`Error during video transformation: ${error.message}`);
     return NextResponse.json(
-      { error: "Internal Server Error" },
+      { error: "Internal Server Error", message: error.message },
       { status: 500 }
     );
   }

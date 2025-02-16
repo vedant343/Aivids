@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { CldUploadWidget } from "next-cloudinary";
 import "next-cloudinary/dist/cld-video-player.css";
 import { FaUpload } from "react-icons/fa";
@@ -8,7 +8,7 @@ import DownloadButton from "../components/DownloadButton";
 import Navbar from "../components/Navbar";
 import handleUpload from "./handleUpload";
 import saveTransformedVideo from "./saveTransformedVideo";
-
+import UploadInstructions from "../components/UploadInstrcutions";
 function Page() {
   const [videoUrl, setVideoUrl] = useState<string>("");
   const [transformedVideoUrl, setTransformedVideoUrl] = useState<string>("");
@@ -33,8 +33,6 @@ function Page() {
   ) => {
     setIsLoading(true);
     try {
-      console.log("Sending request with:", { videoUrl, prompt });
-
       const response = await fetch("/api/transformVideo", {
         method: "POST",
         headers: {
@@ -48,8 +46,6 @@ function Page() {
       }
 
       const data = await response.json();
-      console.log("Received response:", data);
-
       setTransformedVideoUrl(data.data.video.url);
       setDownloadLink(data.data.video.url);
       await saveTransformedVideo(
@@ -66,15 +62,12 @@ function Page() {
     }
   };
 
-  useEffect(() => {
-    // If you don't need to fetch videos here, you can remove this effect
-  }, []);
-
   return (
-    <div>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-white text-black p-4">
       <Navbar />
-      <div className="bg-white flex flex-col items-center justify-center min-h-screen p-4 space-y-6 mt-10">
-        <div className="border border-gray-300 rounded-md p-2 bg-black max-w-md">
+      <div className="bg-white flex flex-col items-center justify-center p-5 space-y-8 mt-10 max-w-2xl w-full">
+        <UploadInstructions />
+        <div className="border border-gray-300 rounded-md p-4 bg-black px-7 max-w-2xl">
           <CldUploadWidget
             uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET!}
             options={{
@@ -84,9 +77,9 @@ function Page() {
             onSuccess={uploadHandler}
           >
             {({ open }) => (
-              <div>
+              <div className="flex items-center justify-center">
                 <button
-                  className="flex items-center justify-center text-white text-lg px-6 py-3 bg-transparent rounded-md"
+                  className="flex items-center justify-center text-white text-lg py-2 bg-transparent rounded-md"
                   onClick={() => open()}
                 >
                   <FaUpload className="mr-2" /> Upload a Video
@@ -94,13 +87,10 @@ function Page() {
               </div>
             )}
           </CldUploadWidget>
-          <p className="text-white text-sm mt-2 text-center">
-            (Allowed Format : mov, mp4)
-          </p>
         </div>
 
         {videoUrl && (
-          <div className="border-4 border-dotted text-black text-center text-lg border-gray-300 rounded-md p-4 w-full max-w-md">
+          <div className="border-4 border-dotted text-black text-center text-lg border-gray-300 rounded-md p-4 w-full max-w-2xl">
             Uploaded Video Preview
             <video
               className="w-full border border-gray-300 rounded-md mt-2"
@@ -110,17 +100,18 @@ function Page() {
           </div>
         )}
 
-        <textarea
-          className="bg-white text-black w-full max-w-md p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        <input
+          type="text"
+          className="bg-white text-black w-full p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           placeholder="Write your prompt here..."
           onChange={(e) => setPrompt(e.target.value)}
-        ></textarea>
+        />
 
         <button
-          className={`px-4 py-2 rounded-md transition flex items-center justify-center ${
+          className={`px-8 py-4 rounded-full font-medium flex items-center justify-center transition ${
             !videoUrl || !prompt || isLoading
               ? "bg-gray-400 text-gray-200 cursor-not-allowed"
-              : "bg-black text-white"
+              : "bg-indigo-600 text-white hover:bg-indigo-700"
           }`}
           disabled={!videoUrl || !prompt || isLoading}
           onClick={() =>
