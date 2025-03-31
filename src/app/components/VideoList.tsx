@@ -26,7 +26,10 @@ const VideoList = () => {
         const data = await response.json();
         setVideos(data);
       } catch (error) {
-        setError(error.message);
+        // Check if error is an instance of Error
+        const message =
+          error instanceof Error ? error.message : "Unknown error occurred";
+        setError(message);
       } finally {
         setLoading(false);
       }
