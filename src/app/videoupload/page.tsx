@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { CldUploadWidget } from "next-cloudinary";
 import "next-cloudinary/dist/cld-video-player.css";
-import { FaUpload } from "react-icons/fa";
+//import { FaUpload } from "react-icons/fa";
 import DownloadButton from "../components/DownloadButton";
 import Navbar from "../components/Navbar";
 import handleUpload from "./handleUpload";
@@ -83,7 +83,7 @@ function Page() {
                   className="flex items-center justify-center text-white text-lg py-2 bg-transparent rounded-md"
                   onClick={() => open()}
                 >
-                  <FaUpload className="mr-2" /> Upload a Video
+                  {/* <FaUpload className="mr-2" /> */}Upload a Video
                 </button>
               </div>
             )}
