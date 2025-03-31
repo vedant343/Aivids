@@ -3,13 +3,14 @@ import Link from "next/link";
 import Navbar from "./components/Navbar";
 import VideoList from "./components/VideoList"; // Import the VideoList component
 import { ArrowRight, Video, Wand2 } from "lucide-react";
+import React from "react";
 
 function FeatureCard({
   icon: Icon,
   title,
   description,
 }: {
-  icon: any;
+  icon: React.ElementType;
   title: string;
   description: string;
 }) {

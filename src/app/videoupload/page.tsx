@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { CldUploadWidget } from "next-cloudinary";
 import "next-cloudinary/dist/cld-video-player.css";
-import { FaUpload, FaDownload } from "react-icons/fa";
+import { FaUpload } from "react-icons/fa";
 import DownloadButton from "../components/DownloadButton";
 import Navbar from "../components/Navbar";
 import handleUpload from "./handleUpload";
