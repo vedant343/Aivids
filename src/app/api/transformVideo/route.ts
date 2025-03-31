@@ -42,8 +42,9 @@ export async function POST(req: Request) {
     });
   } catch (error) {
     console.error("Error during video transformation:", error);
+    const message = error instanceof Error ? error.message : "Unknown error";
     return NextResponse.json(
-      { error: "Internal Server Error", message: error.message },
+      { error: "Internal Server Error", message },
       { status: 500 }
     );
   }
