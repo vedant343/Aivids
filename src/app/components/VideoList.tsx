@@ -27,8 +27,7 @@ const VideoList = () => {
         setVideos(data);
       } catch (error) {
         // Check if error is an instance of Error
-        const message =
-          error instanceof Error ? error.message : "Unknown error occurred";
+        const message = error instanceof Error ? error.message : "Unknown error occurred";
         setError(message);
       } finally {
         setLoading(false);
