@@ -18,7 +18,6 @@ function Page() {
   const [downloadLink, setDownloadLink] = useState<string>("");
 
   const uploadHandler = handleUpload(setVideoUrl);
-
   const transformVideo = async (
     videoUrl: string,
     prompt: string,

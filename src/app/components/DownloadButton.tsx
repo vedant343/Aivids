@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { FaDownload } from "react-icons/fa";
+//import { FaDownload } from "react-icons/fa";
 
 export default function DownloadButton({
   videoUrl,
@@ -45,7 +45,7 @@ export default function DownloadButton({
         "Downloading..."
       ) : (
         <>
-          <FaDownload className="mr-2" />
+          {/* <FaDownload className="mr-2" /> */}
           Download Video
         </>
       )}
