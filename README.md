@@ -1,8 +1,8 @@
 # AiVid
 
-AiVid is a Next.js application that allows users to upload videos, apply transformations using AI, and download the transformed videos. The application leverages Cloudinary for video uploads and a custom AI service for video transformations.
+AiVid is a Next.js application that allows users to upload videos, apply AI transformations, and download the transformed videos. The application leverages Cloudinary for video uploads and a custom AI service for video transformations.
 
-![Demo Video](https://drive.google.com/uc?export=view&id1xKpyKcVegVE2d_Ft3adQ6moeiTisYi_D)
+![Video](https://drive.google.com/uc?export=view&id=1xKpyKcVegVE2d_Ft3adQ6moeiTisYi_D)
 
 ## Table of Contents
 
